@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!--   below is parent module-->
     <parent>
         <artifactId>quora</artifactId>
         <groupId>com.upgrad.quora</groupId>
@@ -11,6 +12,7 @@
 
     <artifactId>quora-api</artifactId>
 
+<!--    group id is taken automatically here based upon parent module....... version id not mentioned here , but would be there in deployable project-->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -36,6 +38,9 @@
             <version>2.6.1</version>
             <scope>compile</scope>
         </dependency>
+
+
+<!--        service module added as dependency so that we have access to service classes-->
         <dependency>
             <groupId>com.upgrad.quora</groupId>
             <artifactId>quora-service</artifactId>
@@ -48,6 +53,16 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
     </dependencies>
+
+
+    
+
+
+
+
+
+
+
 
 
     <build>
@@ -151,5 +166,11 @@
             </plugin>
         </plugins>
     </build>
+
+
+
+
+
+
 
 </project>

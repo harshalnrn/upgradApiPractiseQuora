@@ -22,10 +22,10 @@ public class PasswordCryptographyProvider {
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
     /**
-     * This method generates Salt and hashed Password
+     * This method generates Salt and hashed Password, used during sign up
      *
      * @param password char array.
-     * @return String array with [0] encoded salt [1] hashed password.
+     * @return String array with [0] encoded salt [1] hashed password.   //note difference between encoding logic and hashing logic
      */
     public String[] encrypt(final String password) {
         byte[] salt = generateSaltBytes();
@@ -35,7 +35,7 @@ public class PasswordCryptographyProvider {
 
     /**
      * This method re-generates hashed Password from raw-password and salt.
-     * This will be used during authentication.
+     * This will be used during authentication., during sign in. Note this is static method
      *
      * @param password char array.
      * @param salt     byte array.
