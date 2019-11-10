@@ -1,7 +1,11 @@
 package com.upgrad.quora.service.entity;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -10,7 +14,8 @@ import javax.validation.constraints.Size;
 
 //you can replace getters and settters with lombok library, which also includes logging support
 @NamedQueries({
-        @NamedQuery(name = "findByUsername", query = "select u from UserEntity u where u.username=:username")
+        @NamedQuery(name = "findByUsername", query = "select u from UserEntity u where u.userName=:userName"),
+        @NamedQuery(name="findByUserId",query = "select u from UserEntity u where u.uuid=:uuid")
 }
 )
 public class UserEntity {
@@ -24,16 +29,16 @@ public class UserEntity {
     private String uuid;
     @Column(name = "firstname")
     @Size(max = 30)
-    private String firstname;
+    private String firstName;
     @Column(name = "lastname")
     @Size(max = 30)
-    private String lastname;
+    private String lastName;
     @Column(name = "username")
     @Size(max = 30)
-    private String username;
+    private String userName;
     @Column(name = "email")
     @Size(max = 50)
-    private String email;
+    private String emailAddress;
     @Column(name = "password")
     @Size(max = 255)
     private String password;
@@ -45,7 +50,7 @@ public class UserEntity {
     private String country;
     @Column(name = "aboutme")
     @Size(max = 50)
-    private String aboutme;
+    private String aboutMe;
     @Column(name = "dob")
     @Size(max = 30)
     private String dob;
@@ -54,7 +59,11 @@ public class UserEntity {
     private String role;
     @Column(name = "contactnumber")
     @Size(max = 30)
-    private String contactnumber;
+    private String contactNumber;
+
+//@OneToMany(mappedBy = "userEntity")        //bidirectional mapping transient field //mappedBy =child object field name in UserEntity entity
+//private List<UserAuthenticationEntity> list;
+
 
     public Integer getId() {
         return id;
@@ -72,36 +81,36 @@ public class UserEntity {
         this.uuid = uuid;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public String getPassword() {
@@ -128,12 +137,12 @@ public class UserEntity {
         this.country = country;
     }
 
-    public String getAboutme() {
-        return aboutme;
+    public String getAboutMe() {
+        return aboutMe;
     }
 
-    public void setAboutme(String aboutme) {
-        this.aboutme = aboutme;
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
     }
 
     public String getDob() {
@@ -152,11 +161,11 @@ public class UserEntity {
         this.role = role;
     }
 
-    public String getContactnumber() {
-        return contactnumber;
+    public String getContactNumber() {
+        return contactNumber;
     }
 
-    public void setContactnumber(String contactnumber) {
-        this.contactnumber = contactnumber;
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
     }
 }

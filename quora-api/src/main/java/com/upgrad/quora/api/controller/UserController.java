@@ -9,6 +9,7 @@ import com.upgrad.quora.api.model.SignupUserResponse;
 //import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.business.PasswordCryptographyProvider;
 import com.upgrad.quora.service.business.UserService;
+import com.upgrad.quora.service.entity.UserAuthenticationEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.AuthenticationFailedException;
 import com.upgrad.quora.service.exception.SignOutRestrictedException;
@@ -35,17 +36,17 @@ public class UserController {
         String[] encryptedDetails=passwordCryptographyProvider.encrypt(signupUserRequest.getPassword());
         UserEntity userEntity = new UserEntity();
         userEntity.setUuid(UUID.randomUUID().toString());
-        userEntity.setAboutme(signupUserRequest.getAboutMe());
-        userEntity.setContactnumber(signupUserRequest.getContactNumber());
+        userEntity.setAboutMe(signupUserRequest.getAboutMe());
+        userEntity.setContactNumber(signupUserRequest.getContactNumber());
         userEntity.setCountry(signupUserRequest.getCountry());
         userEntity.setDob(signupUserRequest.getDob());
-        userEntity.setFirstname(signupUserRequest.getFirstName());
-        userEntity.setUsername(signupUserRequest.getUserName());
+        userEntity.setFirstName(signupUserRequest.getFirstName());
+        userEntity.setUserName(signupUserRequest.getUserName());
         userEntity.setSalt(encryptedDetails[0]);  //note the algorithm and API used for this
         userEntity.setRole("nonadmin");  //by default non admin while login . for now
-        userEntity.setLastname(signupUserRequest.getLastName());
+        userEntity.setLastName(signupUserRequest.getLastName());
         userEntity.setPassword(encryptedDetails[1]); //note the SHAencryption algorithm and API used for this
-        userEntity.setEmail(signupUserRequest.getEmailAddress());
+        userEntity.setEmailAddress(signupUserRequest.getEmailAddress());
 
 userService.getNewUserDetailsToSave(userEntity);
 SignupUserResponse signupUserResponse = new SignupUserResponse();
@@ -72,5 +73,15 @@ UserEntity userEntity=userService.ValidateSignedInUser(finalCrdentials[0],finalC
         signinResponse.setId(userEntity.getUuid());
         signinResponse.setMessage("SIGNED IN SUCCESSFULLY");
 return new ResponseEntity<SigninResponse>(signinResponse,HttpStatus.OK);
+    }
+
+@RequestMapping(value = "/signout",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<SignoutResponse> signOut(@RequestHeader("authorization")String accessToken){
+
+UserAuthenticationEntity entity=userService.logoutUser(accessToken);
+SignoutResponse signoutResponse=new SignoutResponse();
+signoutResponse.setId(entity.getUuid());
+signoutResponse.setMessage("user signed out succesfully");
+        return new ResponseEntity<SignoutResponse>(signoutResponse,HttpStatus.OK);
     }
 }
