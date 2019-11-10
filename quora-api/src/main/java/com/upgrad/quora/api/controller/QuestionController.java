@@ -1,10 +1,17 @@
 package com.upgrad.quora.api.controller;
 
 import com.upgrad.quora.api.model.*;
+import com.upgrad.quora.service.business.QuestionService;
+import com.upgrad.quora.service.business.UserService;
+import com.upgrad.quora.service.entity.QuestionEntity;
+import com.upgrad.quora.service.entity.UserAuthenticationEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.ZonedDateTime;
 
 //import com.upgrad.quora.service.business.QuestionBusinessService;
 //import com.upgrad.quora.service.entity.QuestionsEntity;
@@ -16,13 +23,25 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/question")
 public class QuestionController {
-
+    @Autowired
+    UserService userService;
+    @Autowired
+    QuestionService questionService;
 
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionResponse> createQuestion(@RequestHeader("authorization") String accessToken, QuestionRequest questionRequest) {
 
+        UserAuthenticationEntity userAuthenticationEntity = userService.getUserByAccessToken(accessToken);
+            QuestionEntity questionEntity = new QuestionEntity();
 
+            questionEntity.setContent(questionRequest.getContent());
+            questionEntity.setDate(ZonedDateTime.now());
+            questionEntity.setUserId(userAuthenticationEntity.getUserEntity());
+            questionEntity.setUuid(userAuthenticationEntity.getUuid());
+            questionService.storeNewQuestion(questionEntity);
         QuestionResponse questionResponse = new QuestionResponse();
+        questionResponse.setId(questionEntity.getUuid());
+        questionResponse.setStatus("question succesfully created and store");
         return new ResponseEntity<QuestionResponse>(questionResponse, HttpStatus.CREATED);
     }
 
