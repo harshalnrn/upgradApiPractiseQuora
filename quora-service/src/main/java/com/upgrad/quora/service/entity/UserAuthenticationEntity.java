@@ -32,7 +32,7 @@ public class UserAuthenticationEntity {
 
     //mention the association below and which is foreign key and referenced key
     //crud delete operation on child object(parent table) cascaded to parent object(child table)
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)                 //make sure if its one to one or many to one
+    @ManyToOne(fetch = FetchType.LAZY)                 //make sure if its one to one or many to one
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     private UserEntity userEntity; //if user deleted, first user auth would be deleted, then user
 

@@ -15,7 +15,7 @@ import java.util.List;
 //you can replace getters and settters with lombok library, which also includes logging support
 @NamedQueries({
         @NamedQuery(name = "findByUsername", query = "select u from UserEntity u where u.userName=:userName"),
-        @NamedQuery(name="findByUserId",query = "select u from UserEntity u where u.uuid=:uuid")
+        @NamedQuery(name = "findByUserId", query = "select u from UserEntity u where u.uuid=:uuid")
 }
 )
 public class UserEntity {
@@ -61,9 +61,36 @@ public class UserEntity {
     @Size(max = 30)
     private String contactNumber;
 
-//@OneToMany(mappedBy = "userEntity")        //bidirectional mapping transient field //mappedBy =child object field name in UserEntity entity
-//private List<UserAuthenticationEntity> list;
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    //bidirectional mapping transient field //mappedBy =child object field name in UserEntity entity
+    //list of all UserAuthenticationEntity for deleted userId shall be deleted
+    private List<UserAuthenticationEntity> list;
 
+    @OneToMany(mappedBy = "userId",cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
+    //list of all QuestionEntity for deleted userId shall be deleted
+    private List<QuestionEntity> questionList;
+
+
+
+
+
+
+
+    public List<UserAuthenticationEntity> getList() {
+        return list;
+    }
+
+    public void setList(List<UserAuthenticationEntity> list) {
+        this.list = list;
+    }
+
+    public List<QuestionEntity> getQuestionList() {
+        return questionList;
+    }
+
+    public void setQuestionList(List<QuestionEntity> questionList) {
+        this.questionList = questionList;
+    }
 
     public Integer getId() {
         return id;

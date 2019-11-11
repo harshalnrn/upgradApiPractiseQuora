@@ -7,7 +7,12 @@ import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "question")
-//@NamedQuery(name = "", query = "")
+@NamedQueries({
+        @NamedQuery(name = "findByUuid", query = "select q from QuestionEntity q where q.uuid=:questionId"),
+        @NamedQuery(name = "findQuestionsByUserId", query = "select q from QuestionEntity q where q.userId.uuid=:userId")
+
+})
+
 public class QuestionEntity {
 
     @Column(name = "id")
@@ -23,8 +28,8 @@ public class QuestionEntity {
     @Column(name = "date")
     private ZonedDateTime date;
     @JoinColumn(name = "user_id",referencedColumnName = "id")
-    @ManyToOne(cascade =  CascadeType.REMOVE ,fetch = FetchType.LAZY)
-    private UserEntity userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserEntity userId; //if userid deleted, question should be also be deleted (i.e corresponding row)
 
     public Integer getId() {
         return id;
