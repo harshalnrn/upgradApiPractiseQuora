@@ -66,14 +66,14 @@ public class UserEntity {
     //list of all UserAuthenticationEntity for deleted userId shall be deleted
     private List<UserAuthenticationEntity> list;
 
-    @OneToMany(mappedBy = "userId",cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
-    //list of all QuestionEntity for deleted userId shall be deleted
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    //list of all QuestionEntity for deleted userId
     private List<QuestionEntity> questionList;
 
 
-
-
-
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    //list of answers to be deleted for deleted userId
+    private List<AnswerEntity> answerList;
 
 
     public List<UserAuthenticationEntity> getList() {

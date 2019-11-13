@@ -41,7 +41,7 @@ public class QuestionController {
         questionEntity.setContent(questionRequest.getContent());
         questionEntity.setDate(ZonedDateTime.now());
         questionEntity.setUserId(userAuthenticationEntity.getUserEntity());
-        questionEntity.setUuid(userAuthenticationEntity.getUuid());
+        questionEntity.setUuid(UUID.randomUUID().toString());
         questionService.storeNewQuestion(questionEntity);
         QuestionResponse questionResponse = new QuestionResponse();
         questionResponse.setId(questionEntity.getUuid());
@@ -51,10 +51,18 @@ public class QuestionController {
 
 
     @RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<QuestionDetailsResponse> getAllQuoraQuestions(@RequestHeader("authorization") String accessToken) {
+    public ResponseEntity<List<QuestionDetailsResponse>> getAllQuoraQuestions(@RequestHeader("authorization") String accessToken) {
+        List<QuestionEntity> questionList = questionService.getAllQuestions();
+        List<QuestionDetailsResponse> responseList = new LinkedList<QuestionDetailsResponse>();
 
-        QuestionDetailsResponse questionDetailsResponse = new QuestionDetailsResponse();
-        return new ResponseEntity<QuestionDetailsResponse>(questionDetailsResponse, HttpStatus.OK);
+        for (QuestionEntity entity : questionList) {
+            QuestionDetailsResponse questionDetailsResponse = new QuestionDetailsResponse();
+            questionDetailsResponse.setId(entity.getUuid());
+            questionDetailsResponse.setContent(entity.getContent());
+            responseList.add(questionDetailsResponse);
+        }
+
+        return new ResponseEntity<List<QuestionDetailsResponse>>(responseList, HttpStatus.OK);
     }
 
 

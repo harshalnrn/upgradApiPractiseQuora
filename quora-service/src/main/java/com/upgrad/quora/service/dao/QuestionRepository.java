@@ -1,6 +1,8 @@
 package com.upgrad.quora.service.dao;
 
+import com.upgrad.quora.service.entity.AnswerEntity;
 import com.upgrad.quora.service.entity.QuestionEntity;
+import org.apache.commons.lang3.reflect.Typed;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -43,7 +45,7 @@ public class QuestionRepository {
         return entity;
     }
 
-    public QuestionEntity deleteQuestion(QuestionEntity entity){
+    public QuestionEntity deleteQuestion(QuestionEntity entity) {
 
         entityManager.remove(entity);
         return entity;
@@ -62,4 +64,18 @@ public class QuestionRepository {
         }
         return questionList;
     }
+
+    public List<QuestionEntity> getAllQuestionsOfAllUsers() {
+        List<QuestionEntity> questionList = null;
+        try {
+            TypedQuery<QuestionEntity> query = entityManager.createNamedQuery("findAllQuestions", QuestionEntity.class);
+            questionList = query.getResultList();
+        } catch (NoResultException e) {
+
+        }
+        return questionList;
+    }
+
+
+
 }

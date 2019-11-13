@@ -4,12 +4,14 @@ package com.upgrad.quora.service.entity;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "question")
 @NamedQueries({
         @NamedQuery(name = "findByUuid", query = "select q from QuestionEntity q where q.uuid=:questionId"),
-        @NamedQuery(name = "findQuestionsByUserId", query = "select q from QuestionEntity q where q.userId.uuid=:userId")
+        @NamedQuery(name = "findQuestionsByUserId", query = "select q from QuestionEntity q where q.userId.uuid=:userId"),
+        @NamedQuery(name="findAllQuestions",query = "select q from QuestionEntity q")
 
 })
 
@@ -30,6 +32,9 @@ public class QuestionEntity {
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity userId; //if userid deleted, question should be also be deleted (i.e corresponding row)
+
+    @OneToMany(mappedBy = "questionEntity",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<AnswerEntity> answerList;
 
     public Integer getId() {
         return id;

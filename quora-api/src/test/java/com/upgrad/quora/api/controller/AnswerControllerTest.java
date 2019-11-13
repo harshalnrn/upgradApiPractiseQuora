@@ -27,6 +27,8 @@ public class AnswerControllerTest {
     //This test case passes when you try to create the answer but the JWT token entered does not exist in the database.
     @Test
     public void createAnswerWithNonExistingAccessToken() throws Exception {
+
+        //is there a name for below style of programming, where variables not used to returned values, and directly used
         mvc.perform(MockMvcRequestBuilders.post("/question/database_question_uuid/answer/create?answer=my_answer").contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).header("authorization", "non_existing_access_token"))
                 .andExpect(status().isForbidden())
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value("ATHR-001"));

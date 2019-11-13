@@ -4,6 +4,7 @@ import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.entity.UserAuthenticationEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import org.apache.commons.lang3.reflect.Typed;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
@@ -17,14 +18,18 @@ public class UserRepository {
 
 
     @PersistenceContext
-    EntityManager entityManager;
-
-
+    private EntityManager entityManager;
+    @Autowired
+    private UserDao userDao;           //how did you instantiate an interface here ??
+    @Autowired
+    private UserAuthenticationDao userAuthenticationDao;
     //auto configuration operations: example db happens only if configurations at application level in app.properties ?
     //what is configurations stored on server level
 
     public void insertNewUser(UserEntity userEntity) throws DataAccessException {
-        entityManager.persist(userEntity);
+        // entityManager.persist(userEntity);
+        userDao.save(userEntity);
+
     }
 
 
@@ -45,7 +50,9 @@ public class UserRepository {
 
     public void insertUserAuth(UserAuthenticationEntity userAuthenticationEntity) {
 
-        entityManager.persist(userAuthenticationEntity); //constraint validation and persist  //note data access exception is important
+        // entityManager.persist(userAuthenticationEntity); //constraint validation and persist  //note data access exception is important
+
+        userAuthenticationDao.save(userAuthenticationEntity);
     }
 
 
@@ -64,8 +71,8 @@ public class UserRepository {
     public UserAuthenticationEntity logOutUser(UserAuthenticationEntity userAuthenticationEntity) {
 
         userAuthenticationEntity.setLogoutAt(ZonedDateTime.now());
-        userAuthenticationEntity = entityManager.merge(userAuthenticationEntity); //persist vs merge ? //what if any exception here ?
-
+        // userAuthenticationEntity = entityManager.merge(userAuthenticationEntity); //persist vs merge ? //what if any exception here ?
+        userAuthenticationEntity = userAuthenticationDao.save(userAuthenticationEntity);
         return userAuthenticationEntity;
     }
 
@@ -85,9 +92,11 @@ public class UserRepository {
 
     public void deleteUser(UserEntity entity) {
 
-        entityManager.remove(entity);   //manage exception   //remove vs detach?
-    }
+        //entityManager.remove(entity);   //manage exception   //remove vs detach?
 
+        userDao.delete(entity);
+
+    }
 
 
 }
