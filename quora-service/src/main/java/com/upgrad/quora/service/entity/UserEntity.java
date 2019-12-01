@@ -61,9 +61,11 @@ public class UserEntity {
     @Size(max = 30)
     private String contactNumber;
 
+
+    //bidirectional mapping
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    //bidirectional mapping transient field //mappedBy =child object field name in UserEntity entity
-    //list of all UserAuthenticationEntity for deleted userId shall be deleted
+    //bidirectional mapping transient field //mappedBy =child object(i.e parent table) field name in UserAuthenticationEntity entity
+    //example: list of all UserAuthenticationEntities, of to be deleted userId, shall be deleted first (i.e cascading)
     private List<UserAuthenticationEntity> list;
 
     @OneToMany(mappedBy = "userId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
